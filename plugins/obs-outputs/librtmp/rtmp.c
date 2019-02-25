@@ -340,8 +340,10 @@ RTMP_TLS_LoadCerts() {
 
     CFRelease(keychain_ref);
 #elif defined(__linux__)
-    if (mbedtls_x509_crt_parse_path(chain, "/etc/ssl/certs/") != 0) {
-        goto error;
+    const int certLoadStatus=mbedtls_x509_crt_parse_path(chain, "/etc/ssl/certs/");
+    if (certLoadStatus != 0) {
+      RTMP_Log(RTMP_LOGWARNING, "Error loading %d certificates in /etc/ssl/certs",
+        certLoadStatus);
     }
 #endif
 
